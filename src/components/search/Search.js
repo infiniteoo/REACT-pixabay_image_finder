@@ -1,70 +1,68 @@
-import React, { useState, useEffect } from "react";
+import React, { Component } from "react";
 import TextField from "material-ui/TextField";
 import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
 import axios from "axios";
 import ImageResults from "../image-results/ImageResults";
 
-const Search = () => {
-  const [state, setState] = useState({
+class Search extends Component {
+  state = {
     searchText: "",
     amount: 15,
     apiUrl: "https://pixabay.com/api",
     apiKey: process.env.REACT_APP_PIX_API_KEY,
     images: [],
-  });
+  };
 
-  console.log(state.images);
-
-  const onTextChange = (e) => {
+  onTextChange = (e) => {
     const val = e.target.value;
-    setState({ ...state, [e.target.name]: val });
+    this.setState({ [e.target.name]: val }, () => {
+      if (val === "") {
+        this.setState({ images: [] });
+      } else {
+        axios
+          .get(
+            `${this.state.apiUrl}/?key=${this.state.apiKey}&q=${this.state.searchText}&image_type=photo&per_page=${this.state.amount}&safesearch=true`
+          )
+          .then((res) => this.setState({ images: res.data.hits }))
+          .catch((err) => console.log(err));
+      }
+    });
   };
 
-  useEffect(() => {
-    if (state.searchText === "") {
-      setState({ ...state, images: [] });
-    } else {
-      axios
-        .get(
-          `${state.apiUrl}/?key=${state.apiKey}&q=${state.searchText}&image_type=photo&per_page=${state.amount}&safesearch=true`
-        )
-        .then((res) => setState({ ...state, images: res.data.hits }))
-        .catch((err) => console.log(err));
-    }
-  }, [state.searchText]);
+  onAmountChange = (e, index, value) => this.setState({ amount: value });
 
-  const onAmountChange = (e, index, value) => {
-    setState({ ...state, amount: value });
-    console.log(state.amount);
-  };
-
-  return (
-    <div>
-      <TextField
-        name="searchText"
-        value={state.searchText}
-        onChange={onTextChange}
-        floatingLabelText="Search For Images"
-        fullWidth={true}
-      />
-      <br />
-      <SelectField
-        name="amount"
-        floatingLabelText="Amount"
-        value={state.amount}
-        onChange={onAmountChange}
-      >
-        <MenuItem value={5} primaryText="5" />
-        <MenuItem value={10} primaryText="10" />
-        <MenuItem value={15} primaryText="15" />
-        <MenuItem value={30} primaryText="30" />
-        <MenuItem value={50} primaryText="50" />
-      </SelectField>
-      <br />
-      {state.images.length > 0 ? <ImageResults images={state.images} /> : null}
-    </div>
-  );
-};
+  render() {
+    console.log(this.state.images);
+    return (
+      <div>
+        <TextField
+          name="searchText"
+          value={this.state.searchText}
+          onChange={this.onTextChange}
+          floatingLabelText="Search For Images"
+          fullWidth={true}
+        />
+        <br />
+        <SelectField
+          name="amount"
+          floatingLabelText="Amount"
+          value={this.state.amount}
+          onChange={this.onAmountChange}
+        >
+          <MenuItem value={5} primaryText="5" />
+          <MenuItem value={10} primaryText="10" />
+          <MenuItem value={15} primaryText="15" />
+          <MenuItem value={30} primaryText="30" />
+          <MenuItem value={50} primaryText="50" />
+        </SelectField>
+        <br />
+        {this.state.images.length > 0 ? (
+          <ImageResults images={this.state.images} />
+        ) : null}
+      </div>
+    );
+  }
+}
 
 export default Search;
