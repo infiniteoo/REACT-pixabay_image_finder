@@ -3,6 +3,7 @@ import TextField from "material-ui/TextField";
 import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
 import axios from "axios";
+import ImageResults from "../image-results/ImageResults";
 
 const Search = () => {
   const [state, setState] = useState({
@@ -56,6 +57,7 @@ const Search = () => {
         <MenuItem value={50} primaryText="50" />
       </SelectField>
       <br />
+      {state.images.length > 0 ? <ImageResults images={state.images} /> : null}
     </div>
   );
 };
