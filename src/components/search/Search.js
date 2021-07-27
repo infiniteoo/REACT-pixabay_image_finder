@@ -17,16 +17,21 @@ const Search = () => {
   console.log(state.images);
 
   const onTextChange = (e) => {
-    setState({ ...state, [e.target.name]: e.target.value });
+    const val = e.target.value;
+    setState({ ...state, [e.target.name]: val });
   };
 
   useEffect(() => {
-    axios
-      .get(
-        `${state.apiUrl}/?key=${state.apiKey}&q=${state.searchText}&image_type=photo&per_page=${state.amount}&safesearch=true`
-      )
-      .then((res) => setState({ ...state, images: res.data.hits }))
-      .catch((err) => console.log(err));
+    if (state.searchText === "") {
+      setState({ ...state, images: [] });
+    } else {
+      axios
+        .get(
+          `${state.apiUrl}/?key=${state.apiKey}&q=${state.searchText}&image_type=photo&per_page=${state.amount}&safesearch=true`
+        )
+        .then((res) => setState({ ...state, images: res.data.hits }))
+        .catch((err) => console.log(err));
+    }
   }, [state.searchText]);
 
   const onAmountChange = (e, index, value) => {
