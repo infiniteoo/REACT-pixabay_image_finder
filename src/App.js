@@ -1,10 +1,14 @@
 import "./App.css";
+import NavBar from "./components/navbar/NavBar";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 function App() {
   return (
-    <div className="App">
-      <h1>hello</h1>
-    </div>
+    <MuiThemeProvider>
+      <div>
+        <NavBar />
+      </div>
+    </MuiThemeProvider>
   );
 }
 
