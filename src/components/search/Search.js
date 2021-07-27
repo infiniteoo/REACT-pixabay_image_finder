@@ -13,7 +13,21 @@ const Search = () => {
 
   console.log(state.apiKey);
 
-  return <div></div>;
+  const onTextChange = () => {
+    console.log("blahblah");
+  };
+
+  return (
+    <div>
+      <TextField
+        name="searchText"
+        value={state.searchText}
+        onChange={onTextChange}
+        floatingLabelText="Search For Images"
+        fullWidth={true}
+      />
+    </div>
+  );
 };
 
 export default Search;
