@@ -28,8 +28,9 @@ const Search = () => {
       .catch((err) => console.log(err));
   }, [state.searchText]);
 
-  const onAmountChange = () => {
-    console.log("blahblah");
+  const onAmountChange = (e, index, value) => {
+    setState({ ...state, amount: value });
+    console.log(state.amount);
   };
 
   return (
