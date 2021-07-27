@@ -14,8 +14,9 @@ const Search = () => {
 
   console.log(state.apiKey);
 
-  const onTextChange = () => {
-    console.log("blahblah");
+  const onTextChange = (e) => {
+    setState({...state, [e.target.name]: e.target.value });
+    console.log(state);
   };
 
   const onAmountChange = () => {
